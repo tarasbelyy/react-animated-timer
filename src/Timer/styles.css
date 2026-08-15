@@ -1,0 +1,83 @@
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  background-color: rgb(206, 229, 245);
+  border: 2px solid lightgray;
+  padding: 0px;
+  margin: 0px;
+}
+
+.svg {
+  transform: rotate(-90deg);
+}
+
+.background-circle {
+  fill: none;
+  stroke: rgb(253, 255, 245);
+  stroke-width: 5;
+}
+
+.progress-circle {
+  fill: none;
+  stroke: rgb(46, 46, 207);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.progress-text {
+  font-family: sans-serif;
+  font-size: 36px;
+  font-weight: bold;
+  text-anchor: middle;
+  dominant-baseline: central;
+  transform: rotate(90deg);
+  transform-origin: 100px 100px;
+}
+
+button {
+  margin: 5px;
+  width: 75px;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+input {
+  padding: 0px;
+  margin: 5px;
+  width: 60px;
+  font-family: sans-serif;
+  font-size: 16px;
+  border: 2px solid lightgray;
+  border-radius: 5px;
+}
+
+h2 {
+  padding: 0px;
+  margin: 10px 0px 10px 0px;
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.input-container {
+  padding: 0px;
+  margin: 5px;
+}
+
+.button-container {
+  padding: 0px;
+  margin: 5px;
+  display: flex;
+  gap: 5px;
+
+}
+
+.svg-container {
+  padding: 0px;
+  margin: 5px;
+}
