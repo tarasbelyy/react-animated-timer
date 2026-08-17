@@ -56,8 +56,10 @@ const Timer = () => {
       secondsRef.current--;
       setTimeShow(() => calculateProgress());
       if (secondsRef.current === 0){
-        resetTimer();
-        setTimeout(() => alert("Таймер закончился!"), 50);
+        setTimeout(() => {
+          alert("Таймер закончился!");
+          resetTimer();
+        }, 50);
       }
     },1000);
     setIsRunning(() => true);
