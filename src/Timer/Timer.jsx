@@ -5,6 +5,7 @@ const Timer = () => {
 
   const [time, setTime] = useState(0);
   const [timeShow, setTimeShow] = useState("00:00");
+  const [isRunning, setIsRunning] = useState(false);
   const timerRef = useRef(null);
   const secondsRef = useRef(0);
   const offsetRef = useRef(0);
@@ -12,7 +13,7 @@ const Timer = () => {
   const circleLength = 2*Math.PI*90;
   const strokeDasharray = `${circleLength}px ${circleLength}px`;
 
-  const showProgress = () => {
+  const calculateProgress = () => {
     let secondsShow = secondsRef.current % 60;
     let minutesShow = Math.floor(secondsRef.current / 60); 
     secondsShow = (secondsShow < 10) ? "0"+secondsShow.toString() : secondsShow.toString();
@@ -22,10 +23,10 @@ const Timer = () => {
     } else {
       offsetRef.current = circleLength * (1 - (secondsRef.current/(time*60)));
     }
-    setTimeShow(()=>`${minutesShow}:${secondsShow}`);
-  }
+    return `${minutesShow}:${secondsShow}`;
+  };
 
-  const handleChange = (event) => {
+  const handleInputChange = (event) => {
     if (timerRef.current) return;
     let newValue = event.target.value;
     if (newValue.toString().indexOf(".") !== -1) {
@@ -39,7 +40,7 @@ const Timer = () => {
     secondsRef.current = newValue * 60;
     offsetRef.current = 0;
     setTime(() => newValue);
-    showProgress();
+    setTimeShow(() => calculateProgress());
   };
 
   const resetTimer = () => {
@@ -47,7 +48,8 @@ const Timer = () => {
     timerRef.current = null;
     secondsRef.current = time * 60;
     offsetRef.current = 0;
-    showProgress();
+    setIsRunning(() => false);
+    setTimeShow(() => calculateProgress());
   };
 
   const startTimer = () => {
@@ -55,12 +57,14 @@ const Timer = () => {
     if (secondsRef.current === 0) return;
     timerRef.current = setInterval(() => {
       secondsRef.current--;
-      showProgress();
+      setTimeShow(() => calculateProgress());
       if (secondsRef.current === 0){
         resetTimer();
         setTimeout(() => alert("Таймер закончился!"), 50);
       }
+    
     },1000);
+    setIsRunning(() => true);
   };
 
   const restartTimer = () => {
@@ -68,7 +72,8 @@ const Timer = () => {
     clearInterval(timerRef.current);
     timerRef.current = null;
     secondsRef.current = time*60;
-    showProgress();
+    setIsRunning(() => false);
+    setTimeShow(() => calculateProgress());
     startTimer();
   };
 
@@ -79,27 +84,27 @@ const Timer = () => {
       <input
         type="number"
         value={time}
-        onChange={handleChange}
-        disabled={timerRef.current}
-        style={{ backgroundColor : (timerRef.current) ? "lightgray" : "white" }}
+        onChange={handleInputChange}
+        disabled={isRunning}
+        style={{ backgroundColor : (isRunning) ? "lightgray" : "white" }}
       >
       </input>
       </div>
       <div className="button-container">
         <button
           onClick={startTimer}
-          disabled={timerRef.current}
-          style={{ backgroundColor : (timerRef.current) ? "gray" : "lightgray" }}
+          disabled={isRunning}
+          style={{ backgroundColor : (isRunning) ? "gray" : "lightgray" }}
         >Старт</button>
         <button
           onClick={resetTimer}
-          disabled={!timerRef.current}
-          style={{ backgroundColor : (!timerRef.current) ? "gray" : "lightgray" }}
+          disabled={!isRunning}
+          style={{ backgroundColor : (!isRunning) ? "gray" : "lightgray" }}
         >Сброс</button>
         <button
           onClick={restartTimer}
-          disabled={!timerRef.current}
-          style={{ backgroundColor : (!timerRef.current) ? "gray" : "lightgray" }}
+          disabled={!isRunning}
+          style={{ backgroundColor : (!isRunning) ? "gray" : "lightgray" }}
         >Заново</button>
       </div>
       <div className="svg-container">
