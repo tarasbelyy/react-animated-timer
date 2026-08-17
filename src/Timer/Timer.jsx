@@ -8,7 +8,6 @@ const Timer = () => {
   const [isRunning, setIsRunning] = useState(false);
   const timerRef = useRef(null);
   const secondsRef = useRef(0);
-  const offsetRef = useRef(0);
 
   const circleLength = 2*Math.PI*90;
   const strokeDasharray = `${circleLength}px ${circleLength}px`;
@@ -18,12 +17,12 @@ const Timer = () => {
     let minutesShow = Math.floor(secondsRef.current / 60); 
     secondsShow = (secondsShow < 10) ? "0"+secondsShow.toString() : secondsShow.toString();
     minutesShow = (minutesShow < 10) ? "0"+minutesShow.toString() : minutesShow.toString();
-    if (!timerRef.current) {
-      offsetRef.current = 0;
-    } else {
-      offsetRef.current = circleLength * (1 - (secondsRef.current/(time*60)));
-    }
     return `${minutesShow}:${secondsShow}`;
+  };
+
+  const calculateOffset = () => {
+    if (!timerRef.current) return "0px";
+    return `${circleLength * (1 - (secondsRef.current/(time*60)))}px`;
   };
 
   const handleInputChange = (event) => {
@@ -38,7 +37,6 @@ const Timer = () => {
     if (newValue < 0) newValue = 0;
     if (newValue > 99) newValue = 99;
     secondsRef.current = newValue * 60;
-    offsetRef.current = 0;
     setTime(() => newValue);
     setTimeShow(() => calculateProgress());
   };
@@ -47,7 +45,6 @@ const Timer = () => {
     clearInterval(timerRef.current);
     timerRef.current = null;
     secondsRef.current = time * 60;
-    offsetRef.current = 0;
     setIsRunning(() => false);
     setTimeShow(() => calculateProgress());
   };
@@ -62,7 +59,6 @@ const Timer = () => {
         resetTimer();
         setTimeout(() => alert("Таймер закончился!"), 50);
       }
-    
     },1000);
     setIsRunning(() => true);
   };
@@ -110,7 +106,15 @@ const Timer = () => {
       <div className="svg-container">
         <svg className="svg" width="200" height="200" viewBox="0 0 200 200">
           <circle className="background-circle" cx="100" cy="100" r="90" />
-          <circle className="progress-circle" cx="100" cy="100" r="90" stroke-dasharray={strokeDasharray} stroke-dashoffset={`${offsetRef.current}px`}/>
+          <circle
+          className="progress-circle"
+          cx="100"
+          cy="100"
+          r="90"
+          stroke-dasharray={strokeDasharray}
+          stroke-dashoffset={calculateOffset()}
+          style={{stroke: (isRunning && secondsRef.current<15) ? "#eb1527" : "#2e2ecf"}}
+          />
           <text className="progress-text" x="100" y="100" >{timeShow}</text>
         </svg>
       </div>
