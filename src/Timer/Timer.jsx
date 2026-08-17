@@ -59,10 +59,6 @@ const Timer = () => {
       if (secondsRef.current === 0){
         resetTimer();
         setTimeout(() => alert("Таймер закончился!"), 50);
-        return;
-      }
-      if (secondsRef.current % 60 === 0) {
-        setTimeout(() => alert("Прошла минута", 50));
       }
     },1000);
   };
@@ -80,12 +76,31 @@ const Timer = () => {
     <div className="timer-container">
       <div className="input-container">
       <h2>Таймер</h2>
-      <input type="number" value={time} onChange={handleChange}></input>
+      <input
+        type="number"
+        value={time}
+        onChange={handleChange}
+        disabled={timerRef.current}
+        style={{ backgroundColor : (timerRef.current) ? "lightgray" : "white" }}
+      >
+      </input>
       </div>
       <div className="button-container">
-        <button onClick={startTimer}>Старт</button>
-        <button onClick={resetTimer}>Сброс</button>
-        <button onClick={restartTimer}>Заново</button>
+        <button
+          onClick={startTimer}
+          disabled={timerRef.current}
+          style={{ backgroundColor : (timerRef.current) ? "gray" : "lightgray" }}
+        >Старт</button>
+        <button
+          onClick={resetTimer}
+          disabled={!timerRef.current}
+          style={{ backgroundColor : (!timerRef.current) ? "gray" : "lightgray" }}
+        >Сброс</button>
+        <button
+          onClick={restartTimer}
+          disabled={!timerRef.current}
+          style={{ backgroundColor : (!timerRef.current) ? "gray" : "lightgray" }}
+        >Заново</button>
       </div>
       <div className="svg-container">
         <svg className="svg" width="200" height="200" viewBox="0 0 200 200">
